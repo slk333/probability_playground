@@ -1,38 +1,48 @@
 import Foundation
 
-
-
-
-// being the first success means being a success AND all the previous attemps are failures
-func pFirstSuccessAt(rollNumber:Int)->Double{
-    return pSuccess * pow((1-pSuccess),Double(rollNumber-1))
+func pFirstSuccessAt(n:Int,pSuccess:Double)->Double{
     
+    let pFailure = (1-pSuccess)
+    
+    // being the first success means being a success AND all the previous attemps are failures
+    return pSuccess * pow(pFailure,Double(n-1))
+    
+   
+    // let pFirstSuccessAt1 = pSuccess
+    // let pFirstSuccessAt2 = pSuccess * pFailure
+    // let pFirstSuccessAt3 = pSuccess * pFailure * pFailure
     // let pFirstSuccessAtN = p(success at n) * p(failure of all previous)
-    // let pFirstSuccessAt1 = pOfSucess
-    // let pFirstSuccessAt2 = pOfSucess * pOfFailureOf1                  = pOfSucess * (1-pOfSucess)
-    // let pFirstSuccessAt3 = pOfSucess *  pOfFailureOf1 * pOfFailureOf2 = pOfSucess * (1-pOfSucess) * (1-pOfSucess)
-    // let pFirstSuccessAt4 =                                            = pOfSucess * pow((1-pOfSucess), 3)
+    // let pFirstSuccessAtN = pSuccess * pFailure ^ (n-1)
+    // on utilise n-1 car on considère le que premier roll est  "1" plutot que  "0". Mais en réalité il faut utiliser "0", d'où le n-1
 }
 
-
-// at least one success means adding the probability of all the first success
-func pAtLeastOneSuccessInN(rolls:Int)->Double{
+func pAtLeastOneSuccessInN(rolls:Int, pSuccess:Double)->Double{
+    
     var pAtLeastOneSuccess = 0.0
     for i in 1...rolls{
-        pAtLeastOneSuccess += pFirstSuccessAt(rollNumber: i)
+        
+        // at least one success means adding the probability of a first success of each roll
+        pAtLeastOneSuccess += pFirstSuccessAt(n: i, pSuccess:pSuccess)
     }
     return pAtLeastOneSuccess
 }
 
 
-
-
 // using the functions
-let pSuccess = 0.20
-let pAtLeastOneSuccess = pAtLeastOneSuccessInN(rolls: 5)
-let pFailure = 1 - pAtLeastOneSuccess
 
-let NumberOfSuccessFor1Failure = 1 / pFailure
+let pAtLeastOneSuccess = pAtLeastOneSuccessInN(rolls: 10, pSuccess:0.2)
+let percentageChanceOfAtLeastOneSuccess = pAtLeastOneSuccess * 100
+
+
+let pAllFailures = 1 - pAtLeastOneSuccess
+let rarityOfAllFailure = 1/pAllFailures
+// rarity means the number of series you need to wait in order to get the event, here ALL_FAILURE
+
+
+
+
+
+
 
 
 
